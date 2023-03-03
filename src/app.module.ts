@@ -1,10 +1,23 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { PrismaClientExceptionFilter, PrismaModule } from './lib/prisma';
+import { APP_FILTER, HttpAdapterHost } from '@nestjs/core';
+import { PrismaService } from 'nestjs-prisma';
 
 @Module({
-  imports: [],
+  imports: [PrismaModule.forRoot()],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    PrismaService,
+    AppService,
+    {
+      provide: APP_FILTER,
+      useFactory: ({ httpAdapter }: HttpAdapterHost) => {
+        return new PrismaClientExceptionFilter(httpAdapter);
+      },
+      inject: [HttpAdapterHost],
+    },
+  ],
 })
 export class AppModule {}
