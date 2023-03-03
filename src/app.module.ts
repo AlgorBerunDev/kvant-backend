@@ -4,9 +4,10 @@ import { AppService } from './app.service';
 import { PrismaClientExceptionFilter, PrismaModule } from './lib/prisma';
 import { APP_FILTER, HttpAdapterHost } from '@nestjs/core';
 import { PrismaService } from 'nestjs-prisma';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
-  imports: [PrismaModule.forRoot()],
+  imports: [PrismaModule.forRoot(), UsersModule],
   controllers: [AppController],
   providers: [
     PrismaService,
