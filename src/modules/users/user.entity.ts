@@ -10,6 +10,9 @@ export class UserEntity implements User {
   @ApiProperty({ type: String })
   email: string;
 
+  @ApiProperty({ type: String, required: true })
+  username: string;
+
   @ApiProperty({ type: String })
   name: string;
 }

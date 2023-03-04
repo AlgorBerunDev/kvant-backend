@@ -72,14 +72,31 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
     host: ArgumentsHost,
   ) {
     const statusCode = this.errorCodesStatusMapping[exception.code];
-    const message =
-      `[${exception.code}]: ` + this.exceptionShortMessage(exception.message);
+    const message = this.exceptionShortMessage(exception.message);
+    const req = host.switchToHttp().getRequest();
 
     if (!Object.keys(this.errorCodesStatusMapping).includes(exception.code)) {
       return super.catch(exception, host);
     }
 
-    super.catch(new HttpException({ statusCode, message }, statusCode), host);
+    super.catch(
+      new HttpException(
+        {
+          statusCode,
+          message: [
+            {
+              value: req.body[exception.meta.target[0]],
+              property: exception.meta.target[0],
+              constraints: {
+                [`${exception.code}`]: message,
+              },
+            },
+          ],
+        },
+        statusCode,
+      ),
+      host,
+    );
   }
 
   private catchNotFoundError(
