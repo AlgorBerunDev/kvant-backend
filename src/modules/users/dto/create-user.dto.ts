@@ -1,7 +1,8 @@
 // src/articles/dto/create-article.dto.ts
 
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsEmail } from 'class-validator';
+import { IsNotEmpty, IsString, IsEmail, Validate } from 'class-validator';
+import { IsUniqueConstraint } from 'src/utils/validators/IsUniqueConstraint';
 
 export class CreateUserDto {
   @IsString()
@@ -17,6 +18,7 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty()
+  @Validate(IsUniqueConstraint, ['user', 'username'])
   @ApiProperty({ required: false })
   username: string;
 }
