@@ -2,13 +2,18 @@
 
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, IsEmail, Validate } from 'class-validator';
-import { IsUniqueConstraint } from 'src/utils/validators/IsUniqueConstraint';
+import { IsUniqueConstraint } from '../../../utils/validators/IsUniqueConstraint';
 
 export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ required: true })
   name: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({ required: true })
+  password: string;
 
   @IsString()
   @IsNotEmpty()

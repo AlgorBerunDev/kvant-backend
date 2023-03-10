@@ -3,11 +3,12 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaClientExceptionFilter, PrismaModule } from './lib/prisma';
 import { APP_FILTER, HttpAdapterHost } from '@nestjs/core';
+import { UserModule } from './modules/user/user.module';
 import { PrismaService } from 'nestjs-prisma';
-import { UsersModule } from './modules/users/users.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
-  imports: [PrismaModule.forRoot(), UsersModule],
+  imports: [PrismaModule.forRoot({ isGlobal: true }), UserModule, AuthModule],
   controllers: [AppController],
   providers: [
     PrismaService,
