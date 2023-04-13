@@ -7,6 +7,18 @@ import { ValidationError, useContainer } from 'class-validator';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  const corsOptions = {
+    allowedHeaders: [
+      'origin',
+      'x-requested-with',
+      'content-type',
+      'accept',
+      'authorization',
+    ],
+    credentials: true,
+    origin: ['http://localhost:3001', 'http://localhost:3000'],
+  };
+  app.enableCors(corsOptions);
   app.useGlobalPipes(
     new ValidationPipe({
       exceptionFactory: (validationErrors: ValidationError[] = []) => {
