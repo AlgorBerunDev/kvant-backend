@@ -6,6 +6,7 @@ import { APP_FILTER, HttpAdapterHost } from '@nestjs/core';
 import { UserModule } from './modules/user/user.module';
 import { PrismaService } from 'nestjs-prisma';
 import { AuthModule } from './modules/auth/auth.module';
+import { PostModule } from './modules/post/post.module';
 
 @Module({
   imports: [PrismaModule.forRoot({ isGlobal: true }), UserModule, AuthModule],
@@ -13,6 +14,7 @@ import { AuthModule } from './modules/auth/auth.module';
   providers: [
     PrismaService,
     AppService,
+    PostModule,
     {
       provide: APP_FILTER,
       useFactory: ({ httpAdapter }: HttpAdapterHost) => {
