@@ -9,12 +9,16 @@ import { AuthModule } from './modules/auth/auth.module';
 import { PostModule } from './modules/post/post.module';
 
 @Module({
-  imports: [PrismaModule.forRoot({ isGlobal: true }), UserModule, AuthModule],
+  imports: [
+    PrismaModule.forRoot({ isGlobal: true }),
+    UserModule,
+    AuthModule,
+    PostModule,
+  ],
   controllers: [AppController],
   providers: [
     PrismaService,
     AppService,
-    PostModule,
     {
       provide: APP_FILTER,
       useFactory: ({ httpAdapter }: HttpAdapterHost) => {
