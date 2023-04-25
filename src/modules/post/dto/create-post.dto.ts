@@ -10,7 +10,6 @@ import {
 } from 'class-validator';
 
 export class CreatePostDto {
-  //TODO: add validation unique
   @IsString()
   @IsNotEmpty()
   @Validate(IsUniqueConstraint, ['post', 'title'])
@@ -27,9 +26,9 @@ export class CreatePostDto {
   @ApiProperty({ type: Boolean, default: false })
   published: boolean;
 
+  @Validate(IsExist, ['user', 'id'])
   @IsInt()
   @IsNotEmpty()
-  @Validate(IsExist, ['user', 'id'])
   @ApiProperty({ type: Number, required: true })
   authorId: number;
 }
