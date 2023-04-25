@@ -15,20 +15,43 @@ export class ProductService {
   async findAll(
     pageNumber: number,
     pageSize: number,
-    searchName?: string,
+    search?: string,
   ): Promise<Product[]> {
-    const skip = (pageNumber - 1) * pageSize;
+    const skip = (Math.max(pageNumber, 1) - 1) * pageSize;
     const take = pageSize;
-    const where: Prisma.ProductWhereInput = searchName
+    const where: Prisma.ProductWhereInput = search
       ? {
           name: {
-            contains: searchName,
+            contains: search,
             mode: 'insensitive',
           },
         }
       : {};
 
     return this.prisma.product.findMany({
+      skip,
+      take,
+      where,
+    });
+  }
+
+  async count(
+    pageNumber: number,
+    pageSize: number,
+    search?: string,
+  ): Promise<number> {
+    const skip = (Math.max(pageNumber, 1) - 1) * pageSize;
+    const take = pageSize;
+    const where: Prisma.ProductWhereInput = search
+      ? {
+          name: {
+            contains: search,
+            mode: 'insensitive',
+          },
+        }
+      : {};
+
+    return this.prisma.product.count({
       skip,
       take,
       where,

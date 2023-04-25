@@ -22,12 +22,25 @@ export class ProductController {
     return this.productService.create(createProductDto);
   }
 
+  @Get()
   async findAll(
     @Query('pageNumber') pageNumber: number,
     @Query('pageSize') pageSize: number,
-    @Query('searchName') searchName?: string,
-  ): Promise<Product[]> {
-    return this.productService.findAll(pageNumber, pageSize, searchName);
+    @Query('search') search?: string,
+  ): Promise<{ data: Product[]; meta: any }> {
+    const data = await this.productService.findAll(
+      pageNumber || 0,
+      pageSize || 10,
+      search,
+    );
+
+    const count = await this.productService.count(
+      pageNumber || 0,
+      pageSize || 10,
+      search,
+    );
+
+    return { data, meta: { pageNumber, pageSize, search, count } };
   }
 
   @Get(':id')
