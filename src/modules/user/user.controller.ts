@@ -17,7 +17,7 @@ export class UserController {
     return this.userService.create(user);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Get()
   @ApiOkResponse({ type: UserEntity, isArray: true })
   users(): Promise<User[]> {
