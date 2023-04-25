@@ -17,7 +17,7 @@ export class IsExist implements ValidatorConstraintInterface {
       ? validationArguments.constraints[1]
       : validationArguments.property;
 
-    const data = await this.prisma[model].findUnique({
+    const data = await this.prisma[model].findFirst({
       where: {
         [field]: value,
       },
@@ -27,6 +27,6 @@ export class IsExist implements ValidatorConstraintInterface {
   }
 
   defaultMessage() {
-    return '$property $value is already exist';
+    return '$property is not exist';
   }
 }

@@ -17,13 +17,13 @@ export class IsUniqueConstraint implements ValidatorConstraintInterface {
       ? validationArguments.constraints[1]
       : validationArguments.property;
 
-    const user = await this.prisma[model].findUnique({
+    const data = await this.prisma[model].findFirst({
       where: {
         [field]: value,
       },
     });
 
-    return !user;
+    return !data;
   }
 
   defaultMessage() {
