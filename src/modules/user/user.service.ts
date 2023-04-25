@@ -22,6 +22,6 @@ export class UserService {
   }
 
   findByIdentity(identity: string): Promise<User> {
-    return this.prisma.user.findUnique({ where: { username: identity } });
+    return this.prisma.user.findUnique({ where: { contact: identity } });
   }
 }

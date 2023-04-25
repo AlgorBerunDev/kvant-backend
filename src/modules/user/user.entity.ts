@@ -8,14 +8,17 @@ export class UserEntity implements User {
   id: number;
 
   @ApiProperty({ type: String })
-  email: string;
+  contact: string;
 
   @ApiProperty({ type: String, required: true })
   username: string;
 
   @ApiProperty({ type: String })
-  name: string;
-
-  @ApiProperty({ type: String })
   password: string;
+
+  @ApiProperty({ type: Date })
+  createdAt: Date;
+
+  @ApiProperty({ type: Date })
+  updatedAt: Date;
 }

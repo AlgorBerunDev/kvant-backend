@@ -1,11 +1,4 @@
-import {
-  Controller,
-  Body,
-  Post,
-  Request,
-  UseGuards,
-  Get,
-} from '@nestjs/common';
+import { Controller, Body, Post, Request, UseGuards } from '@nestjs/common';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { UserEntity } from '../user/user.entity';
 import { AuthService } from './auth.service';
