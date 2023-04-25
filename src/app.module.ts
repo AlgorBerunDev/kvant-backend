@@ -6,14 +6,16 @@ import { APP_FILTER, HttpAdapterHost } from '@nestjs/core';
 import { UserModule } from './modules/user/user.module';
 import { PrismaService } from 'nestjs-prisma';
 import { AuthModule } from './modules/auth/auth.module';
-import { PostModule } from './modules/post/post.module';
+import { ProductModule } from './modules/product/product.module';
+import { OrderModule } from './modules/order/order.module';
 
 @Module({
   imports: [
     PrismaModule.forRoot({ isGlobal: true }),
     UserModule,
     AuthModule,
-    PostModule,
+    ProductModule,
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [
