@@ -58,7 +58,12 @@ export class ProductService {
     });
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
+    await this.prisma.product.update({
+      where: { id },
+      data: { views: { increment: 1 } },
+    });
+
     return this.prisma.product.findFirst({ where: { id } });
   }
 
