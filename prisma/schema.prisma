@@ -26,6 +26,7 @@ model Product {
   description  String
   price        Float
   views        Int           @default(0)
+  images       Image[]       @relation("ProductImage")
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   orderDetails OrderDetail[]
@@ -51,4 +52,16 @@ model OrderDetail {
   price     Float
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Image {
+  id            Int      @id @default(autoincrement())
+  url           String
+  width         Int
+  resize        Json?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  imageableId   Int
+  imageableType String
+  product       Product? @relation("ProductImage", fields: [imageableId], references: [id], map: "product_imageableId")
 }
