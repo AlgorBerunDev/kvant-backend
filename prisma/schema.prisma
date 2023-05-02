@@ -36,7 +36,7 @@ model Order {
   id           Int           @id @default(autoincrement())
   user         User          @relation(fields: [userId], references: [id])
   userId       Int
-  status       Int
+  status       String
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   orderDetails OrderDetail[]

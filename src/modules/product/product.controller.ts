@@ -16,7 +16,7 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from '@prisma/client';
 import { FileInterceptor } from '@nestjs/platform-express';
 
-@Controller('product')
+@Controller('products')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
