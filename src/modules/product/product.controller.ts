@@ -3,15 +3,18 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   Query,
+  UseInterceptors,
+  UploadedFile,
+  Put,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from '@prisma/client';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('product')
 export class ProductController {
@@ -48,7 +51,7 @@ export class ProductController {
     return this.productService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
     return this.productService.update(+id, updateProductDto);
   }
@@ -56,5 +59,31 @@ export class ProductController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.productService.remove(+id);
+  }
+
+  @Get(':id/images')
+  images(@Param('id') id: number) {
+    return this.productService.images(+id);
+  }
+
+  @Post(':id/images')
+  @UseInterceptors(FileInterceptor('file'))
+  addImage(@UploadedFile('file') imageFile: any, @Param('id') id: number) {
+    return this.productService.addImage(+id, imageFile);
+  }
+
+  @Put(':id/images/:imageId')
+  @UseInterceptors(FileInterceptor('file'))
+  updateImage(
+    @Param('id') id: number,
+    @Param('imageId') imageId: number,
+    @UploadedFile('file') imageFile,
+  ) {
+    return this.productService.updateImage(+id, +imageId, imageFile);
+  }
+
+  @Delete(':id/images/:imageId')
+  removeImage(@Param('id') id: number, @Param('imageId') imageId: number) {
+    return this.productService.removeImage(+id, +imageId);
   }
 }
