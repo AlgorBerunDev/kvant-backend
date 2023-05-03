@@ -21,15 +21,16 @@ model User {
 }
 
 model Product {
-  id           Int           @id @default(autoincrement())
+  id           Int                 @id @default(autoincrement())
   name         String
   description  String
   price        Float
-  views        Int           @default(0)
-  images       Image[]       @relation("ProductImage")
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  views        Int                 @default(0)
+  images       Image[]             @relation("ProductImage")
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
   orderDetails OrderDetail[]
+  categories   CategoriesOnPosts[]
 }
 
 model Order {
@@ -64,4 +65,24 @@ model Image {
   imageableId   Int
   imageableType String
   product       Product? @relation("ProductImage", fields: [imageableId], references: [id], map: "product_imageableId")
+}
+
+model Category {
+  id       Int                 @id @default(autoincrement())
+  title    String
+  parentId Int?
+  parent   Category?           @relation("Children", fields: [parentId], references: [id])
+  children Category[]          @relation("Children")
+  products CategoriesOnPosts[]
+}
+
+model CategoriesOnPosts {
+  product    Product  @relation(fields: [productId], references: [id])
+  productId  Int // relation scalar field (used in the `@relation` attribute above)
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int // relation scalar field (used in the `@relation` attribute above)
+  assignedAt DateTime @default(now())
+  assignedBy String
+
+  @@id([productId, categoryId])
 }

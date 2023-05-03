@@ -8,6 +8,7 @@ import { PrismaService } from 'nestjs-prisma';
 import { AuthModule } from './modules/auth/auth.module';
 import { ProductModule } from './modules/product/product.module';
 import { OrderModule } from './modules/order/order.module';
+import { CategoryModule } from './modules/category/category.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { OrderModule } from './modules/order/order.module';
     AuthModule,
     ProductModule,
     OrderModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [
