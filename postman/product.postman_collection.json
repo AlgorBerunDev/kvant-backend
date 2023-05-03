@@ -38,7 +38,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{domain}}/products?pageNumber=1",
+					"raw": "{{domain}}/products?sort=views&order=desc",
 					"host": [
 						"{{domain}}"
 					],
@@ -53,7 +53,97 @@
 						},
 						{
 							"key": "pageNumber",
-							"value": "1"
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "pageSize",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "categoryId",
+							"value": "3",
+							"disabled": true
+						},
+						{
+							"key": "priceMin",
+							"value": "11",
+							"disabled": true
+						},
+						{
+							"key": "priceMax",
+							"value": "99",
+							"disabled": true
+						},
+						{
+							"key": "sort",
+							"value": "views",
+							"description": "all column names"
+						},
+						{
+							"key": "order",
+							"value": "desc",
+							"description": "asc | desc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "mostViewed",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{domain}}/products?sort=views&order=desc",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"products"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "pageNumber",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "pageSize",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "categoryId",
+							"value": "3",
+							"disabled": true
+						},
+						{
+							"key": "priceMin",
+							"value": "11",
+							"disabled": true
+						},
+						{
+							"key": "priceMax",
+							"value": "99",
+							"disabled": true
+						},
+						{
+							"key": "sort",
+							"value": "views",
+							"description": "all column names"
+						},
+						{
+							"key": "order",
+							"value": "desc",
+							"description": "asc | desc"
 						}
 					]
 				}
@@ -85,7 +175,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"product 1 updated\",\n    \"description\": \"description 1\",\n    \"price\": 10,\n    \"categories\": [{\"title\": \"New\", \"id\": 2}, {\"title\": 2, \"id\": 1}]\n}",
+					"raw": "{\n    \"name\": \"product 1 updated\",\n    \"description\": \"description 1\",\n    \"price\": 10,\n    \"categories\": [{\"title\": \"New\", \"id\": 2}, {\"title\": \"2\", \"id\": 1}]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
