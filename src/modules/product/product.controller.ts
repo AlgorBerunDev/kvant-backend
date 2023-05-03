@@ -43,7 +43,10 @@ export class ProductController {
       search,
     );
 
-    return { data, meta: { pageNumber, pageSize, search, count } };
+    return {
+      data,
+      meta: { pageNumber: +pageNumber, pageSize: +pageSize, search, count },
+    };
   }
 
   @Get(':id')

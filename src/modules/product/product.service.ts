@@ -8,8 +8,29 @@ import { Prisma, Product } from '@prisma/client';
 export class ProductService {
   constructor(private prisma: PrismaService) {}
 
-  create(createProductDto: CreateProductDto) {
-    return this.prisma.product.create({ data: createProductDto });
+  async create(createProductDto: CreateProductDto) {
+    return await this.prisma.product.create({
+      data: {
+        ...createProductDto,
+        categories: {
+          create: createProductDto.categories.map((category) => {
+            return {
+              assignedBy: 'user',
+              category: {
+                connect: {
+                  id: category.id,
+                },
+              },
+            };
+          }),
+        },
+      },
+      include: {
+        categories: {
+          select: { productId: true, categoryId: true, category: true },
+        },
+      },
+    });
   }
 
   async findAll(
@@ -64,13 +85,38 @@ export class ProductService {
       data: { views: { increment: 1 } },
     });
 
-    return this.prisma.product.findFirst({ where: { id } });
+    return this.prisma.product.findFirst({
+      where: { id },
+      include: { categories: true },
+    });
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
+  async update(id: number, updateProductDto: UpdateProductDto) {
+    await this.prisma.categoriesOnProducts.deleteMany({
+      where: { productId: id },
+    });
+
     return this.prisma.product.update({
       where: { id },
-      data: updateProductDto,
+      data: {
+        categories: {
+          create: updateProductDto.categories.map((category) => {
+            return {
+              assignedBy: 'user',
+              category: {
+                connect: {
+                  id: category.id,
+                },
+              },
+            };
+          }),
+        },
+      },
+      include: {
+        categories: {
+          select: { productId: true, categoryId: true, category: true },
+        },
+      },
     });
   }
 
