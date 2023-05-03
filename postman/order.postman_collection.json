@@ -39,7 +39,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"orderId\": 1,\n    \"productId\": 1,\n    \"quantity\": 2,\n    \"price\": 100\n}",
+					"raw": "{\n    \"orderId\": 1,\n    \"productId\": 1,\n    \"quantity\": 2\n}",
 					"options": {
 						"raw": {
 							"language": "json"
