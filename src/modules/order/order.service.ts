@@ -20,9 +20,13 @@ export class OrderService {
     });
   }
 
-  addOrderDetail(orderDetailDto: CreateOrderDetailDto) {
+  async addOrderDetail(orderDetailDto: CreateOrderDetailDto) {
+    const product = await this.prisma.product.findUnique({
+      where: { id: orderDetailDto.productId },
+    });
+
     return this.prisma.orderDetail.create({
-      data: orderDetailDto,
+      data: { ...orderDetailDto, price: product.price },
     });
   }
 

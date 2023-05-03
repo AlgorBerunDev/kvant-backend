@@ -15,8 +15,4 @@ export class UpdateOrderDetailDto {
   @IsInt()
   @IsNotEmpty()
   quantity: number;
-
-  @IsNumber()
-  @IsNotEmpty()
-  price: number;
 }
