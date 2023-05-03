@@ -1,5 +1,5 @@
 import { IsExist } from '@/src/utils/validators/IsExist';
-import { IsInt, IsNotEmpty, IsNumber, Validate } from 'class-validator';
+import { IsInt, IsNotEmpty, Validate } from 'class-validator';
 
 export class UpdateOrderDetailDto {
   @Validate(IsExist, ['order', 'id'])

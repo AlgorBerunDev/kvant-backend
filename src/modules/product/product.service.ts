@@ -38,49 +38,39 @@ export class ProductService {
     });
   }
 
-  async findAll(
-    pageNumber: number,
-    pageSize: number,
-    search?: string,
-  ): Promise<Product[]> {
-    const skip = (Math.max(pageNumber, 1) - 1) * pageSize;
-    const take = pageSize;
-    const where: Prisma.ProductWhereInput = search
-      ? {
-          name: {
-            contains: search,
-            mode: 'insensitive',
-          },
-        }
-      : {};
+  async findAll(query: {
+    pageNumber: number;
+    pageSize: number;
+    search?: string;
+    sort?: string;
+    order?: string;
+    categoryId?: number;
+    priceMin?: number;
+    priceMax?: number;
+  }): Promise<Product[]> {
+    const skip = (Math.max(query.pageNumber, 1) - 1) * query.pageSize;
+    const take = query.pageSize;
 
     return this.prisma.product.findMany({
       skip,
       take,
-      where,
+      where: this.makeFindAllWhere(query),
+      orderBy: {
+        [query.sort]: query.order,
+      },
     });
   }
 
   async count(
-    pageNumber: number,
-    pageSize: number,
-    search?: string,
+    query: {
+      search?: string;
+      priceMin?: number;
+      priceMax?: number;
+      categoryId?: number;
+    } = {},
   ): Promise<number> {
-    const skip = (Math.max(pageNumber, 1) - 1) * pageSize;
-    const take = pageSize;
-    const where: Prisma.ProductWhereInput = search
-      ? {
-          name: {
-            contains: search,
-            mode: 'insensitive',
-          },
-        }
-      : {};
-
     return this.prisma.product.count({
-      skip,
-      take,
-      where,
+      where: this.makeFindAllWhere(query),
     });
   }
 
@@ -225,5 +215,51 @@ export class ProductService {
     return this.prisma.image.deleteMany({
       where: { id: imageId, imageableId: id, imageableType: 'Product' },
     });
+  }
+
+  makeFindAllWhere({
+    search,
+    priceMin,
+    priceMax,
+    categoryId,
+  }: {
+    search?: string;
+    priceMin?: number;
+    priceMax?: number;
+    categoryId?: number;
+  }) {
+    const where: Prisma.ProductWhereInput = {};
+
+    if (search) {
+      Object.assign(where, { name: { contains: search, mode: 'insensitive' } });
+    }
+
+    const price = {};
+
+    if (priceMin) {
+      Object.assign(price, { gte: priceMin });
+    }
+
+    if (priceMax && priceMax > priceMin) {
+      Object.assign(price, { lte: priceMax });
+    }
+
+    if (price) {
+      Object.assign(where, { price } as Prisma.ProductWhereInput);
+    }
+
+    if (categoryId && categoryId > 0) {
+      const whereByCategoryId: Prisma.ProductWhereInput = {
+        categories: {
+          some: {
+            categoryId,
+          },
+        },
+      };
+
+      Object.assign(where, whereByCategoryId);
+    }
+
+    return where;
   }
 }

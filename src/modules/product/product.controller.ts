@@ -9,6 +9,8 @@ import {
   UseInterceptors,
   UploadedFile,
   Put,
+  ParseIntPipe,
+  DefaultValuePipe,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -27,25 +29,49 @@ export class ProductController {
 
   @Get()
   async findAll(
-    @Query('pageNumber') pageNumber: number,
-    @Query('pageSize') pageSize: number,
-    @Query('search') search?: string,
-  ): Promise<{ data: Product[]; meta: any }> {
-    const data = await this.productService.findAll(
-      pageNumber || 0,
-      pageSize || 10,
+    @Query('pageNumber', new DefaultValuePipe(0), ParseIntPipe)
+    pageNumber: number,
+    @Query('pageSize', new DefaultValuePipe(5), ParseIntPipe) pageSize: number,
+    @Query('search') search: string,
+    @Query('sort', new DefaultValuePipe('createdAt')) sort: string,
+    @Query('order', new DefaultValuePipe('desc')) order: string,
+    @Query('categoryId', new DefaultValuePipe(0), ParseIntPipe)
+    categoryId: number,
+    @Query('priceMin', new DefaultValuePipe(0), ParseIntPipe) priceMin: number,
+    @Query('priceMax', new DefaultValuePipe(0), ParseIntPipe) priceMax: number,
+  ): Promise<{ data: Product[]; meta: any } | any> {
+    // return this.productService.count();
+    const data = await this.productService.findAll({
+      pageNumber,
+      pageSize,
       search,
-    );
+      sort,
+      order,
+      categoryId,
+      priceMin,
+      priceMax,
+    });
 
-    const count = await this.productService.count(
-      pageNumber || 0,
-      pageSize || 10,
+    const count = await this.productService.count({
       search,
-    );
+      priceMax,
+      priceMin,
+      categoryId,
+    });
 
     return {
+      meta: {
+        pageNumber,
+        pageSize,
+        search,
+        priceMin,
+        priceMax,
+        categoryId,
+        sort,
+        order,
+        count,
+      },
       data,
-      meta: { pageNumber: +pageNumber, pageSize: +pageSize, search, count },
     };
   }
 
