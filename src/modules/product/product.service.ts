@@ -27,8 +27,13 @@ export class ProductService {
       },
       include: {
         categories: {
-          select: { productId: true, categoryId: true, category: true },
+          select: {
+            productId: true,
+            categoryId: true,
+            category: true,
+          },
         },
+        images: true,
       },
     });
   }
@@ -116,6 +121,7 @@ export class ProductService {
         categories: {
           select: { productId: true, categoryId: true, category: true },
         },
+        images: true,
       },
     });
   }
