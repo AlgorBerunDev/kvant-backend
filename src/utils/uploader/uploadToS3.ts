@@ -40,7 +40,10 @@ export default async function uploadToS3({
         console.error('Error uploading file: ', err);
         reject(err);
       } else {
-        resolve(data);
+        resolve({
+          ...data,
+          Location: `${process.env.BUCKET_BASE_URL}${data.key}`,
+        });
       }
     });
   });
