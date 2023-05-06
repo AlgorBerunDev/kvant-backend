@@ -1,11 +1,9 @@
 import sharp from 'sharp';
 
-export default async function resize(file, sizes: number[]) {
+export default function resize(
+  file: { buffer: Buffer },
+  size: number,
+): Promise<Buffer> {
   const { buffer } = file;
-
-  const resizedPromiseImages = sizes.map((size) =>
-    sharp(buffer).resize(size).toBuffer(),
-  );
-
-  return Promise.all(resizedPromiseImages);
+  return sharp(buffer).resize(size).toBuffer();
 }

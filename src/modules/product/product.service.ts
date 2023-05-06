@@ -3,6 +3,9 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { PrismaService } from 'nestjs-prisma';
 import { Prisma, Product } from '@prisma/client';
+import uploadToS3 from '@/src/utils/uploader/uploadToS3';
+import convertToJpg from '@/src/utils/image/convertToJpg';
+import resize from '@/src/utils/image/resize';
 
 @Injectable()
 export class ProductService {
@@ -58,6 +61,7 @@ export class ProductService {
       orderBy: {
         [query.sort]: query.order,
       },
+      include: { categories: true, images: true },
     });
   }
 
@@ -82,7 +86,7 @@ export class ProductService {
 
     return this.prisma.product.findFirst({
       where: { id },
-      include: { categories: true },
+      include: { categories: true, images: true },
     });
   }
 
@@ -127,37 +131,49 @@ export class ProductService {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  addImage(id, file) {
-    //TODO: add converter image to jpg
-    //TODO: add resize image to small, medium, large
-    let resize = {};
+  async addImage(id, file) {
+    await uploadToS3(file);
+    const originalImage: Buffer = await convertToJpg(file.buffer);
+    const [smallImage, mediumImage, largeImage] = await Promise.all([
+      resize({ buffer: originalImage }, 24),
+      resize({ buffer: originalImage }, 200),
+      resize({ buffer: originalImage }, 800),
+    ]);
+
+    const [
+      savedOriginalImage,
+      savedSmallImage,
+      savedMediumImage,
+      savedLargeImage,
+    ] = await Promise.all([
+      uploadToS3({ buffer: originalImage, originalname: file.originalname }),
+      uploadToS3({ buffer: smallImage, originalname: file.originalname }),
+      uploadToS3({ buffer: mediumImage, originalname: file.originalname }),
+      uploadToS3({ buffer: largeImage, originalname: file.originalname }),
+    ]);
 
     const original = {
-      url: 'https://placehold.co/800x800',
+      url: savedOriginalImage.Location,
       width: 800,
     };
-
-    if (process.env.NODE_ENV !== 'production') {
-      resize = {
-        small: {
-          url: 'https://placehold.co/24x24',
-          width: 24,
-        },
-        medium: {
-          url: 'https://placehold.co/200x200',
-          width: 200,
-        },
-        large: {
-          url: 'https://placehold.co/800x800',
-          width: 800,
-        },
-      };
-    }
 
     return this.prisma.image.create({
       data: {
         ...original,
-        resize,
+        resize: {
+          small: {
+            url: savedSmallImage.Location,
+            width: 24,
+          },
+          medium: {
+            url: savedMediumImage.Location,
+            width: 200,
+          },
+          large: {
+            url: savedLargeImage.Location,
+            width: 800,
+          },
+        },
         imageableId: id,
         imageableType: 'Product',
       } as any,
