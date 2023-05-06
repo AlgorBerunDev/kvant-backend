@@ -7,6 +7,12 @@ import uploadToS3 from '@/src/utils/uploader/uploadToS3';
 import convertToJpg from '@/src/utils/image/convertToJpg';
 import resize from '@/src/utils/image/resize';
 
+const IMAGE_SIZES = {
+  small: 24,
+  medium: 200,
+  large: 800,
+};
+
 @Injectable()
 export class ProductService {
   constructor(private prisma: PrismaService) {}
@@ -130,27 +136,26 @@ export class ProductService {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async addImage(id, file) {
-    await uploadToS3(file);
     const originalImage: Buffer = await convertToJpg(file.buffer);
-    const [smallImage, mediumImage, largeImage] = await Promise.all([
-      resize({ buffer: originalImage }, 24),
-      resize({ buffer: originalImage }, 200),
-      resize({ buffer: originalImage }, 800),
-    ]);
+
+    const [smallImage, mediumImage, largeImage] =
+      await this.resizeImagesToDifferentSizes(
+        {
+          buffer: originalImage,
+        },
+        [IMAGE_SIZES.small, IMAGE_SIZES.medium, IMAGE_SIZES.large],
+      );
 
     const [
       savedOriginalImage,
       savedSmallImage,
       savedMediumImage,
       savedLargeImage,
-    ] = await Promise.all([
-      uploadToS3({ buffer: originalImage, originalname: file.originalname }),
-      uploadToS3({ buffer: smallImage, originalname: file.originalname }),
-      uploadToS3({ buffer: mediumImage, originalname: file.originalname }),
-      uploadToS3({ buffer: largeImage, originalname: file.originalname }),
-    ]);
+    ] = await this.imagesUploader(
+      [originalImage, smallImage, mediumImage, largeImage],
+      file.originalname,
+    );
 
     const original = {
       url: savedOriginalImage.Location,
@@ -163,15 +168,15 @@ export class ProductService {
         resize: {
           small: {
             url: savedSmallImage.Location,
-            width: 24,
+            width: IMAGE_SIZES.small,
           },
           medium: {
             url: savedMediumImage.Location,
-            width: 200,
+            width: IMAGE_SIZES.medium,
           },
           large: {
             url: savedLargeImage.Location,
-            width: 800,
+            width: IMAGE_SIZES.large,
           },
         },
         imageableId: id,
@@ -180,33 +185,37 @@ export class ProductService {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async updateImage(id, imageId, file) {
-    //TODO: add converter image to jpg
-    //TODO: add resize image to small, medium, large
+  async updateImage(
+    id: number,
+    imageId: number,
+    file: { buffer: Buffer; originalname: string },
+  ) {
+    const originalImage: Buffer = await convertToJpg(file.buffer);
+
+    const [smallImage, mediumImage, largeImage] =
+      await this.resizeImagesToDifferentSizes(
+        {
+          buffer: originalImage,
+        },
+        [IMAGE_SIZES.small, IMAGE_SIZES.medium, IMAGE_SIZES.large],
+      );
+
+    const [
+      savedOriginalImage,
+      savedSmallImage,
+      savedMediumImage,
+      savedLargeImage,
+    ] = await this.imagesUploader(
+      [originalImage, smallImage, mediumImage, largeImage],
+      file.originalname,
+    );
+
     //TODO: remove from bucket
 
-    let resize = {};
     const original = {
-      url: 'https://placehold.co/800x800',
+      url: savedOriginalImage.Location,
       width: 800,
     };
-    if (process.env.NODE_ENV !== 'production') {
-      resize = {
-        small: {
-          url: 'https://placehold.co/24x24',
-          width: 24,
-        },
-        medium: {
-          url: 'https://placehold.co/200x200',
-          width: 200,
-        },
-        large: {
-          url: 'https://placehold.co/800x800',
-          width: 800,
-        },
-      };
-    }
 
     const where = {
       id: imageId,
@@ -218,7 +227,20 @@ export class ProductService {
       where,
       data: {
         ...original,
-        resize,
+        resize: {
+          small: {
+            url: savedSmallImage.Location,
+            width: IMAGE_SIZES.small,
+          },
+          medium: {
+            url: savedMediumImage.Location,
+            width: IMAGE_SIZES.medium,
+          },
+          large: {
+            url: savedLargeImage.Location,
+            width: IMAGE_SIZES.large,
+          },
+        },
       } as any,
     });
 
@@ -277,5 +299,23 @@ export class ProductService {
     }
 
     return where;
+  }
+
+  resizeImagesToDifferentSizes(
+    file: { buffer: Buffer },
+    sizes: number[],
+  ): Promise<Buffer[]> {
+    return Promise.all(
+      sizes.map((size) => resize({ buffer: file.buffer }, size)),
+    );
+  }
+
+  imagesUploader(
+    images: Buffer[],
+    originalname: string,
+  ): Promise<{ Location: string }[]> {
+    return Promise.all(
+      images.map((image) => uploadToS3({ buffer: image, originalname })),
+    );
   }
 }

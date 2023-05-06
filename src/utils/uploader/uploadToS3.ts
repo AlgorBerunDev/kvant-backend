@@ -2,19 +2,21 @@ import { S3 } from 'aws-sdk';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
+type RESPONSE_DATA_TYPE = {
+  ETag: string;
+  Location: string;
+  key: string;
+  Key: string;
+  Bucket: string;
+};
+
 export default async function uploadToS3({
   buffer,
   originalname,
 }: {
   buffer: Buffer;
   originalname: string;
-}): Promise<{
-  ETag: string;
-  Location: string;
-  key: string;
-  Key: string;
-  Bucket: string;
-}> {
+}): Promise<RESPONSE_DATA_TYPE> {
   const s3 = new S3({
     endpoint: process.env.S3_ENDPOINT,
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -32,8 +34,7 @@ export default async function uploadToS3({
   };
 
   return new Promise((resolve, reject) => {
-    //TODO: add type err and data
-    s3.upload(params, (err: any, data: any) => {
+    s3.upload(params, (err: any, data: RESPONSE_DATA_TYPE) => {
       if (err) {
         console.error('Error uploading file: ', err);
         reject(err);
