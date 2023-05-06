@@ -9,7 +9,8 @@ type RESPONSE_DATA_TYPE = {
   Key: string;
   Bucket: string;
 };
-
+//TODO: move all to /utils/s3
+// export default const s3 = {upload, delete}
 export default async function uploadToS3({
   buffer,
   originalname,
