@@ -11,26 +11,52 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  contact   String   @unique
-  username  String
-  password  String
-  orders    Order[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                  Int                        @id @default(autoincrement())
+  contact             String                     @unique
+  username            String
+  password            String
+  orders              Order[]
+  createdAt           DateTime                   @default(now())
+  updatedAt           DateTime                   @updatedAt
+  favouriteProducts   UsersOnFavouriteProducts[]
+  usersOnRateProducts UsersOnRateProducts[]
 }
 
 model Product {
-  id           Int                    @id @default(autoincrement())
-  name         String
-  description  String
-  price        Float
-  views        Int                    @default(0)
-  images       Image[]                @relation("ProductImage")
-  createdAt    DateTime               @default(now())
-  updatedAt    DateTime               @updatedAt
-  orderDetails OrderDetail[]
-  categories   CategoriesOnProducts[]
+  id                  Int                        @id @default(autoincrement())
+  name                String
+  description         String
+  price               Float
+  views               Int                        @default(0)
+  detail              String
+  images              Image[]                    @relation("ProductImage")
+  createdAt           DateTime                   @default(now())
+  updatedAt           DateTime                   @updatedAt
+  orderDetails        OrderDetail[]
+  categories          CategoriesOnProducts[]
+  favouriters         UsersOnFavouriteProducts[]
+  usersOnRateProducts UsersOnRateProducts[]
+}
+
+model UsersOnFavouriteProducts {
+  product   Product  @relation(fields: [productId], references: [id])
+  productId Int // relation scalar field (used in the `@relation` attribute above)
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int // relation scalar field (used in the `@relation` attribute above)
+  createdAt DateTime @default(now())
+
+  @@id([productId, userId])
+}
+
+model UsersOnRateProducts {
+  product   Product  @relation(fields: [productId], references: [id])
+  productId Int // relation scalar field (used in the `@relation` attribute above)
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int // relation scalar field (used in the `@relation` attribute above)
+  rate      Int
+  createdAt DateTime @default(now())
+
+  @@id([productId, userId])
 }
 
 model Order {
@@ -85,4 +111,36 @@ model CategoriesOnProducts {
   assignedBy String
 
   @@id([productId, categoryId])
+}
+
+model ContentText {
+  id           Int            @id @default(autoincrement())
+  key          String         @unique
+  text         String
+  type         String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  contentGroup ContentGroup[] @relation("ContentGroupContentText")
+}
+
+model ContentImage {
+  id           Int            @id @default(autoincrement())
+  key          String         @unique
+  images       Json[]
+  type         String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  contentGroup ContentGroup[] @relation("ContentGroupContentImage")
+}
+
+model ContentGroup {
+  id                   Int           @id @default(autoincrement())
+  name                 String        @unique
+  description          String?
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+  contentableGroupId   Int
+  contentableGroupType String
+  contentImage         ContentImage? @relation("ContentGroupContentImage", fields: [contentableGroupId], references: [id], map: "image_contentableId")
+  contentText          ContentText?  @relation("ContentGroupContentText", fields: [contentableGroupId], references: [id], map: "text_contentableId")
 }

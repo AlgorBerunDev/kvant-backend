@@ -40,7 +40,6 @@ export class ProductController {
     @Query('priceMin', new DefaultValuePipe(0), ParseIntPipe) priceMin: number,
     @Query('priceMax', new DefaultValuePipe(0), ParseIntPipe) priceMax: number,
   ): Promise<{ data: Product[]; meta: any } | any> {
-    // return this.productService.count();
     const data = await this.productService.findAll({
       pageNumber,
       pageSize,
