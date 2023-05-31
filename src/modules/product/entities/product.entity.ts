@@ -5,6 +5,7 @@ export class Product implements Prisma.ProductUncheckedCreateInput {
   name: string;
   description: string;
   price: number;
+  detail: string;
   createdAt?: string | Date;
   updatedAt?: string | Date;
   orderDetails?: Prisma.OrderDetailUncheckedCreateNestedManyWithoutProductInput;

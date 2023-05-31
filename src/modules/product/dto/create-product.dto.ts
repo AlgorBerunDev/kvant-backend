@@ -32,6 +32,10 @@ export class CreateProductDto {
   @IsNotEmpty()
   description: string;
 
+  @IsString()
+  @IsNotEmpty()
+  detail: string;
+
   @IsNotEmpty()
   @Min(0)
   @IsNumber()
