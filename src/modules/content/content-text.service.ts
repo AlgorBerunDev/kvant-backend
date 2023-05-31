@@ -24,20 +24,22 @@ export class ContentTextService {
     });
   }
 
-  findOne(id: number) {
-    return this.prisma.contentText.findUnique({ where: { id } });
+  findOne(key: string) {
+    return this.prisma.contentText.findUnique({ where: { key } });
   }
 
-  async update(id: number, updateContentTextDto: UpdateContentTextDto) {
+  async update(key: string, updateContentTextDto: UpdateContentTextDto) {
     await this.prisma.contentText.update({
-      where: { id },
+      where: { key },
       data: updateContentTextDto,
     });
 
-    return this.prisma.contentText.findUnique({ where: { id } });
+    return this.prisma.contentText.findUnique({
+      where: { key: updateContentTextDto.key },
+    });
   }
 
-  remove(id: number) {
-    return this.prisma.contentText.deleteMany({ where: { id } });
+  remove(key: string) {
+    return this.prisma.contentText.deleteMany({ where: { key } });
   }
 }

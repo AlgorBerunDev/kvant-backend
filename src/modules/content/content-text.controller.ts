@@ -46,21 +46,21 @@ export class ContentTextController {
     };
   }
 
-  @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.contentTextService.findOne(id);
+  @Get(':key')
+  findOne(@Param('key') key: string) {
+    return this.contentTextService.findOne(key);
   }
 
-  @Put(':id')
+  @Put(':key')
   update(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('key') key: string,
     @Body() updateContentTextDto: UpdateContentTextDto,
   ) {
-    return this.contentTextService.update(id, updateContentTextDto);
+    return this.contentTextService.update(key, updateContentTextDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.contentTextService.remove(id);
+  @Delete(':key')
+  remove(@Param('key') key: string) {
+    return this.contentTextService.remove(key);
   }
 }
