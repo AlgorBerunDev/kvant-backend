@@ -16,7 +16,7 @@ async function bootstrap() {
       'authorization',
     ],
     credentials: true,
-    origin: ['http://localhost:3001', 'http://localhost:3000'],
+    origin: [process.env.AUTHORITY, process.env.PUBLIC_DOMEN],
   };
   app.enableCors(corsOptions);
   app.useGlobalPipes(
@@ -45,6 +45,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(3000);
+  await app.listen(parseInt(process.env.PORT));
 }
 bootstrap();
