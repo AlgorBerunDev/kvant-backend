@@ -10,5 +10,5 @@ npx prisma migrate deploy
 
 ## Start in production
 
-- `pm2 start npm --name "KvantBackend3026" -- run "start"` for add pm2
+- `pm2 start npm --name "KvantBackend3026" -- run "start:prod"` for add pm2
 - `pm2 restart KvantBackend3026`
