@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"product 4\",\n    \"description\": \"description 4\",\n    \"price\": 100,\n    \"categories\": [{\"title\": \"K\", \"id\": 1 }]\n}",
+					"raw": "{\n    \"name\": \"product 4\",\n    \"description\": \"description 4\",\n    \"price\": 100,\n    \"categories\": [{\"title\": \"K\", \"id\": 1 }],\n    \"detail\": \"sdgsdg\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -38,7 +38,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{domain}}/products?sort=views&order=desc",
+					"raw": "{{domain}}/products?pageNumber=1&pageSize=1",
 					"host": [
 						"{{domain}}"
 					],
@@ -53,13 +53,11 @@
 						},
 						{
 							"key": "pageNumber",
-							"value": "1",
-							"disabled": true
+							"value": "1"
 						},
 						{
 							"key": "pageSize",
-							"value": "1",
-							"disabled": true
+							"value": "1"
 						},
 						{
 							"key": "categoryId",
@@ -79,12 +77,14 @@
 						{
 							"key": "sort",
 							"value": "views",
-							"description": "all column names"
+							"description": "all column names",
+							"disabled": true
 						},
 						{
 							"key": "order",
 							"value": "desc",
-							"description": "asc | desc"
+							"description": "asc | desc",
+							"disabled": true
 						}
 					]
 				}
@@ -231,7 +231,7 @@
 						{
 							"key": "file",
 							"type": "file",
-							"src": "/Users/dostonxusanov/Downloads/4 (3).jpg"
+							"src": "/Users/dostonxusanov/Downloads/291f5b66-37a4-400b-ae15-3fc26e8d7cf8.jpg"
 						}
 					]
 				},
@@ -271,6 +271,26 @@
 		},
 		{
 			"name": "removeImage",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{domain}}/products/1/images/2",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"products",
+						"1",
+						"images",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "remove",
 			"request": {
 				"method": "DELETE",
 				"header": [],

@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"title\": \"Category 3\",\n    \"parentId\": 2\n}",
+					"raw": "{\n    \"title\": \"Category 1\",\n    \"parentId\": null\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -27,6 +27,112 @@
 					],
 					"path": [
 						"categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "setIcon",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/Users/dostonxusanov/Downloads/291f5b66-37a4-400b-ae15-3fc26e8d7cf8.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{domain}}/categories/2/icon",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"categories",
+						"2",
+						"icon"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "removeIcon",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{domain}}/categories/2/icon",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"categories",
+						"2",
+						"icon"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "removeImage",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/Users/dostonxusanov/Downloads/291f5b66-37a4-400b-ae15-3fc26e8d7cf8.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{domain}}/categories/2/image",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"categories",
+						"2",
+						"image"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "setImage",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/Users/dostonxusanov/Downloads/291f5b66-37a4-400b-ae15-3fc26e8d7cf8.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{domain}}/categories/2/image",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"categories",
+						"2",
+						"image"
 					]
 				}
 			},
@@ -50,13 +156,31 @@
 			"response": []
 		},
 		{
+			"name": "banners",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{domain}}/categories/banners",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"categories",
+						"banners"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "update",
 			"request": {
 				"method": "PATCH",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"title\": \"Category 3 updated\",\n    \"parentId\": 2\n}",
+					"raw": "{\n    \"title\": \"Category 3 updated\",\n    \"isBanner\": true,\n    \"parentId\": 2\n}",
 					"options": {
 						"raw": {
 							"language": "json"

@@ -9,6 +9,7 @@ import {
   ValidateNested,
   IsOptional,
   IsObject,
+  IsBoolean,
 } from 'class-validator';
 
 export class CategoryDto implements Category {
@@ -31,6 +32,10 @@ export class CategoryDto implements Category {
   @IsObject()
   @IsOptional()
   image: any;
+
+  @IsBoolean()
+  @IsOptional()
+  isBanner: boolean;
 }
 export class CreateProductDto {
   @IsString()

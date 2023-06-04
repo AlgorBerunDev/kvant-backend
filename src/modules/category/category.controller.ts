@@ -29,6 +29,11 @@ export class CategoryController {
     return this.categoryService.findAll();
   }
 
+  @Get('/banners')
+  banners() {
+    return this.categoryService.banners();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.categoryService.findOne(+id);

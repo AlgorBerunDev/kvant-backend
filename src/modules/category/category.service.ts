@@ -22,6 +22,12 @@ export class CategoryService {
     });
   }
 
+  banners() {
+    return this.prisma.category.findMany({
+      where: { isBanner: true },
+    });
+  }
+
   findOne(id: number) {
     return this.prisma.category.findUnique({ where: { id } });
   }
