@@ -20,7 +20,7 @@ async function bootstrap() {
     credentials: true,
     origin: [process.env.AUTHORITY, process.env.PUBLIC_DOMEN, 'http://localhost:3000'],
   };
-  app.enableCors(corsOptions);
+  app.enableCors({origin: '*'});
   app.useGlobalPipes(
     new ValidationPipe({
       exceptionFactory: (validationErrors: ValidationError[] = []) => {
