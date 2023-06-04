@@ -47,6 +47,11 @@ export class ProductService {
     });
   }
 
+  async checkCategoryIdForAddProduct(id: number):  Promise<boolean>{
+    const childrenLength = await this.prisma.category.findUnique({ where: {id}, include: { children: true } }).children.length
+    return childrenLength === 0
+  }
+  
   async findAll(query: {
     pageNumber: number;
     pageSize: number;

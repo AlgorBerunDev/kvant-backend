@@ -23,7 +23,9 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
-  create(@Body() createProductDto: CreateProductDto) {
+  async create(@Body() createProductDto: CreateProductDto) {
+    const accessToAddProduct = await this.productService.checkCategoryIdForAddProduct(createProductDto.categories[0].id)
+    if(!accessToAddProduct) return {message: 'Bu oxirgi children category emas, umuman children categorysi bo\'magan categoryga maxsulot qo\'shish mumkin'}
     return this.productService.create(createProductDto);
   }
 
