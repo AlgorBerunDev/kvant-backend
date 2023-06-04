@@ -99,6 +99,7 @@ model Category {
   image    String?
   icon     String?
   parentId Int?
+  isBanner Boolean? @default(false)
   parent   Category?              @relation("Children", fields: [parentId], references: [id])
   children Category[]             @relation("Children")
   products CategoriesOnProducts[]
