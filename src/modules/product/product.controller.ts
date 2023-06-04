@@ -17,15 +17,39 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from '@prisma/client';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { PrismaService } from 'nestjs-prisma';
 
 @Controller('products')
 export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+  constructor(private readonly productService: ProductService, private readonly prisma: PrismaService) {}
 
   @Post()
   async create(@Body() createProductDto: CreateProductDto) {
+    //TODO: move to utils
+    function getIdsNestedObject(object) {
+      const {parent, ...obj} = object
+      if(object.parent) {
+        return [obj, ...getIdsNestedObject(object.parent)]
+      } else {
+        return [obj]
+      }
+    }
+
+    const categoriesTree =  await this.prisma.category.findFirst({where: {id: createProductDto.categories[0].id}, include: {
+      parent: {
+        include: {
+          parent: {
+            include: {
+              parent: true
+            }
+          }
+        }
+      }
+    }})
+    //TODO: move to create product DTO validation 
     const accessToAddProduct = await this.productService.checkCategoryIdForAddProduct(createProductDto.categories[0].id)
     if(!accessToAddProduct) return {message: 'Bu oxirgi children category emas, umuman children categorysi bo\'magan categoryga maxsulot qo\'shish mumkin'}
+    createProductDto.categories =  getIdsNestedObject(categoriesTree)
     return this.productService.create(createProductDto);
   }
 
@@ -83,6 +107,7 @@ export class ProductController {
 
   @Put(':id')
   update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
+    //TODO: add update all parent category
     return this.productService.update(+id, updateProductDto);
   }
 
