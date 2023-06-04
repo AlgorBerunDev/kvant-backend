@@ -6,10 +6,14 @@ import {
   Patch,
   Param,
   Delete,
+  Put,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('categories')
 export class CategoryController {
@@ -41,5 +45,27 @@ export class CategoryController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.categoryService.remove(+id);
+  }
+
+  @Post(':id/image')
+  @UseInterceptors(FileInterceptor('file'))
+  addImage(@UploadedFile('file') imageFile: any, @Param('id') categoryId: number) {
+    return this.categoryService.addImage(+categoryId, imageFile, 'image');
+  }
+
+  @Delete(':id/image')
+  removeImage(@Param('id') categoryId: number) {
+    return this.categoryService.removeImage(+categoryId, 'image')
+  }
+
+  @Post(':id/icon')
+  @UseInterceptors(FileInterceptor('file'))
+  addIcon(@UploadedFile('file') imageFile: any, @Param('id') categoryId: number) {
+    return this.categoryService.addImage(+categoryId, imageFile, 'image');
+  }
+
+  @Delete(':id/icon')
+  removeIcon(@Param('id') categoryId: number) {
+    return this.categoryService.removeImage(+categoryId, 'image')
   }
 }
