@@ -21,35 +21,48 @@ import { PrismaService } from 'nestjs-prisma';
 
 @Controller('products')
 export class ProductController {
-  constructor(private readonly productService: ProductService, private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly productService: ProductService,
+    private readonly prisma: PrismaService,
+  ) {}
 
   @Post()
   async create(@Body() createProductDto: CreateProductDto) {
     //TODO: move to utils
     function getIdsNestedObject(object) {
-      const {parent, ...obj} = object
-      if(object.parent) {
-        return [obj, ...getIdsNestedObject(object.parent)]
+      const { parent, ...obj } = object;
+      if (object.parent) {
+        return [obj, ...getIdsNestedObject(object.parent)];
       } else {
-        return [obj]
+        return [obj];
       }
     }
 
-    const categoriesTree =  await this.prisma.category.findFirst({where: {id: createProductDto.categories[0].id}, include: {
-      parent: {
-        include: {
-          parent: {
-            include: {
-              parent: true
-            }
-          }
-        }
-      }
-    }})
-    //TODO: move to create product DTO validation 
-    const accessToAddProduct = await this.productService.checkCategoryIdForAddProduct(createProductDto.categories[0].id)
-    if(!accessToAddProduct) return {message: 'Bu oxirgi children category emas, umuman children categorysi bo\'magan categoryga maxsulot qo\'shish mumkin'}
-    createProductDto.categories =  getIdsNestedObject(categoriesTree)
+    const categoriesTree = await this.prisma.category.findFirst({
+      where: { id: createProductDto.categories[0].id },
+      include: {
+        parent: {
+          include: {
+            parent: {
+              include: {
+                parent: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    //TODO: move to create product DTO validation
+    const accessToAddProduct =
+      await this.productService.checkCategoryIdForAddProduct(
+        createProductDto.categories[0].id,
+      );
+    if (!accessToAddProduct)
+      return {
+        message:
+          "Bu oxirgi children category emas, umuman children categorysi bo'magan categoryga maxsulot qo'shish mumkin",
+      };
+    createProductDto.categories = getIdsNestedObject(categoriesTree);
     return this.productService.create(createProductDto);
   }
 

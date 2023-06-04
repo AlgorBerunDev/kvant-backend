@@ -8,6 +8,7 @@ import {
   IsInt,
   ValidateNested,
   IsOptional,
+  IsObject,
 } from 'class-validator';
 
 export class CategoryDto implements Category {
@@ -22,6 +23,14 @@ export class CategoryDto implements Category {
   @IsInt()
   @IsNotEmpty()
   id: number;
+
+  @IsObject()
+  @IsOptional()
+  icon: any;
+
+  @IsObject()
+  @IsOptional()
+  image: any;
 }
 export class CreateProductDto {
   @IsString()

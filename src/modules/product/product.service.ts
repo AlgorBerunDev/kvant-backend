@@ -47,12 +47,15 @@ export class ProductService {
     });
   }
 
-  async checkCategoryIdForAddProduct(id: number):  Promise<boolean>{
-    const category = await this.prisma.category.findUnique({ where: {id}, include: { children: true } })
-    console.log(category)
-    return category.children.length === 0
+  async checkCategoryIdForAddProduct(id: number): Promise<boolean> {
+    const category = await this.prisma.category.findUnique({
+      where: { id },
+      include: { children: true },
+    });
+    console.log(category);
+    return category.children.length === 0;
   }
-  
+
   async findAll(query: {
     pageNumber: number;
     pageSize: number;
@@ -133,7 +136,9 @@ export class ProductService {
   }
 
   async remove(id: number) {
-    await this.prisma.categoriesOnProducts.deleteMany({where: {productId: id}})
+    await this.prisma.categoriesOnProducts.deleteMany({
+      where: { productId: id },
+    });
     return this.prisma.product.deleteMany({ where: { id } });
   }
 

@@ -38,18 +38,26 @@ export class CategoryService {
   async addImage(categoryId: number, file: any, fieldName: string) {
     const originalImage: Buffer = await convertToJpg(file.buffer);
 
-    const savedImage = await uploadToS3({buffer: originalImage, originalname: file.originalname})
-    const category = await this.prisma.category.findUnique({where: {id: categoryId}})
+    const savedImage = await uploadToS3({
+      buffer: originalImage,
+      originalname: file.originalname,
+    });
+    const category = await this.prisma.category.findUnique({
+      where: { id: categoryId },
+    });
     await this.prisma.category.update({
       where: { id: categoryId },
       data: {
         ...category,
-        [fieldName]: { url: savedImage.Location }
-      }
-    })
+        [fieldName]: { url: savedImage.Location },
+      },
+    });
   }
 
   async removeImage(id: number, fieldName: string) {
-    await this.prisma.category.update({ where: { id }, data: { [fieldName]: null } })
+    await this.prisma.category.update({
+      where: { id },
+      data: { [fieldName]: null },
+    });
   }
 }

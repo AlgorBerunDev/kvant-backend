@@ -49,23 +49,29 @@ export class CategoryController {
 
   @Post(':id/image')
   @UseInterceptors(FileInterceptor('file'))
-  addImage(@UploadedFile('file') imageFile: any, @Param('id') categoryId: number) {
+  addImage(
+    @UploadedFile('file') imageFile: any,
+    @Param('id') categoryId: number,
+  ) {
     return this.categoryService.addImage(+categoryId, imageFile, 'image');
   }
 
   @Delete(':id/image')
   removeImage(@Param('id') categoryId: number) {
-    return this.categoryService.removeImage(+categoryId, 'image')
+    return this.categoryService.removeImage(+categoryId, 'image');
   }
 
   @Post(':id/icon')
   @UseInterceptors(FileInterceptor('file'))
-  addIcon(@UploadedFile('file') imageFile: any, @Param('id') categoryId: number) {
+  addIcon(
+    @UploadedFile('file') imageFile: any,
+    @Param('id') categoryId: number,
+  ) {
     return this.categoryService.addImage(+categoryId, imageFile, 'image');
   }
 
   @Delete(':id/icon')
   removeIcon(@Param('id') categoryId: number) {
-    return this.categoryService.removeImage(+categoryId, 'image')
+    return this.categoryService.removeImage(+categoryId, 'image');
   }
 }
