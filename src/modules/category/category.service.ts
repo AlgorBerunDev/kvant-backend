@@ -16,7 +16,9 @@ export class CategoryService {
   findAll() {
     return this.prisma.category.findMany({
       where: { parentId: null },
-      include: { children: { include: { children: true } } },
+      include: {
+        children: { include: { children: true } },
+      },
     });
   }
 
@@ -42,22 +44,25 @@ export class CategoryService {
       buffer: originalImage,
       originalname: file.originalname,
     });
-    const category = await this.prisma.category.findUnique({
-      where: { id: categoryId },
-    });
+
     await this.prisma.category.update({
       where: { id: categoryId },
       data: {
-        ...category,
-        [fieldName]: { url: savedImage.Location },
+        [fieldName]: savedImage.Location,
       },
+    });
+
+    return this.prisma.category.findUnique({
+      where: { id: categoryId },
     });
   }
 
-  async removeImage(id: number, fieldName: string) {
-    await this.prisma.category.update({
+  removeImage(id: number, fieldName: string) {
+    const data = {};
+    data[fieldName] = null;
+    return this.prisma.category.update({
       where: { id },
-      data: { [fieldName]: null },
+      data: data,
     });
   }
 }

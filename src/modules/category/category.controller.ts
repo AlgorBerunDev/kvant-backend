@@ -67,11 +67,11 @@ export class CategoryController {
     @UploadedFile('file') imageFile: any,
     @Param('id') categoryId: number,
   ) {
-    return this.categoryService.addImage(+categoryId, imageFile, 'image');
+    return this.categoryService.addImage(+categoryId, imageFile, 'icon');
   }
 
   @Delete(':id/icon')
   removeIcon(@Param('id') categoryId: number) {
-    return this.categoryService.removeImage(+categoryId, 'image');
+    return this.categoryService.removeImage(+categoryId, 'icon');
   }
 }

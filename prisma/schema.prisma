@@ -96,8 +96,8 @@ model Image {
 model Category {
   id       Int                    @id @default(autoincrement())
   title    String
-  image    Json?
-  icon     Json?
+  image    String?
+  icon     String?
   parentId Int?
   parent   Category?              @relation("Children", fields: [parentId], references: [id])
   children Category[]             @relation("Children")
