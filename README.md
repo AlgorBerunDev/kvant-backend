@@ -1,9 +1,18 @@
-**Push migration to database**
+## Migrate in local
+
+```
+npx prisma migrate dev
+```
+
+## Push migration to database
+
 ```
 npx prisma migrate dev --name init
 npx prisma db push
 ```
-**Migrate to production**
+
+## Migrate to production
+
 ```
 npx prisma migrate deploy
 ```

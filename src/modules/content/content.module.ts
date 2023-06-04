@@ -4,9 +4,20 @@ import { ContentTextService } from './content-text.service';
 import { ContentTextController } from './content-text.controller';
 import { ContentImageController } from './content-image.controller';
 import { ContentImageService } from './content-image.service';
+import { ContentDataController } from './content-data.controller';
+import { ContentDataService } from './content-data.service';
 
 @Module({
-  controllers: [ContentTextController, ContentImageController],
-  providers: [ContentTextService, ContentImageService, PrismaService],
+  controllers: [
+    ContentTextController,
+    ContentImageController,
+    ContentDataController,
+  ],
+  providers: [
+    ContentTextService,
+    ContentImageService,
+    ContentDataService,
+    PrismaService,
+  ],
 })
 export class ContentModule {}

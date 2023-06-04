@@ -136,6 +136,16 @@ model ContentImage {
   contentGroup ContentGroup[] @relation("ContentGroupContentImage")
 }
 
+model ContentData {
+  id           Int            @id @default(autoincrement())
+  key          String         @unique
+  data         Json[]
+  type         String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  contentGroup ContentGroup[] @relation("ContentGroupContentData")
+}
+
 model ContentGroup {
   id                   Int           @id @default(autoincrement())
   name                 String        @unique
@@ -146,4 +156,5 @@ model ContentGroup {
   contentableGroupType String
   contentImage         ContentImage? @relation("ContentGroupContentImage", fields: [contentableGroupId], references: [id], map: "image_contentableId")
   contentText          ContentText?  @relation("ContentGroupContentText", fields: [contentableGroupId], references: [id], map: "text_contentableId")
+  contentData          ContentData?  @relation("ContentGroupContentData", fields: [contentableGroupId], references: [id], map: "data_contentableId")
 }

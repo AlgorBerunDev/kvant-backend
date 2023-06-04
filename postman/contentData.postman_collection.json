@@ -1,0 +1,139 @@
+{
+	"info": {
+		"_postman_id": "6dbf10ac-080f-41bb-91c0-259b0daa17bd",
+		"name": "contentData",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13828244"
+	},
+	"item": [
+		{
+			"name": "create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"key\": \"partners\",\n    \"data\": {\n        \"partners\": [\n            {\n                \"image\": \"asdasd\"\n            }\n        ]\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{domain}}/content/data",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"content",
+						"data"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "find",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{domain}}/content/data/:key",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"content",
+						"data",
+						":key"
+					],
+					"variable": [
+						{
+							"key": "key",
+							"value": "partners"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "findAll",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{domain}}/content/data",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"content",
+						"data"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"key\": \"partners\",\n    \"data\": {\n        \"partners\": [\n            {\n                \"image\": \"asfsdg\"\n            }\n        ]\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{domain}}/content/data/:key",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"content",
+						"data",
+						":key"
+					],
+					"variable": [
+						{
+							"key": "key",
+							"value": "partners"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "remove",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{domain}}/content/data/:key",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"content",
+						"data",
+						":key"
+					],
+					"variable": [
+						{
+							"key": "key",
+							"value": "partners"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

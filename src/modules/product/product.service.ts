@@ -52,7 +52,7 @@ export class ProductService {
       where: { id },
       include: { children: true },
     });
-    console.log(category);
+
     return category.children.length === 0;
   }
 
