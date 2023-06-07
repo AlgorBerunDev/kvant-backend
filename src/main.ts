@@ -22,6 +22,7 @@ async function bootstrap() {
       process.env.AUTHORITY,
       process.env.PUBLIC_DOMEN,
       'http://localhost:3000',
+      'http://localhost',
     ],
   };
   app.enableCors(corsOptions);
