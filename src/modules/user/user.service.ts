@@ -8,7 +8,8 @@ export class UserService {
   constructor(private prisma: PrismaService) {}
 
   create(user: CreateUserDto): Promise<User> {
-    return this.prisma.user.create({ data: user as User });
+    const data = user as User;
+    return this.prisma.user.create({ data: { ...data, role: 'public' } });
   }
 
   users() {
@@ -23,5 +24,10 @@ export class UserService {
 
   findByIdentity(identity: string): Promise<User> {
     return this.prisma.user.findUnique({ where: { contact: identity } });
+  }
+
+  async isAdmin(username) {
+    const user = await this.prisma.user.findFirst({ where: { username } });
+    return user.role === 'admin';
   }
 }

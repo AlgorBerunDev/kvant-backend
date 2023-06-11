@@ -5,6 +5,8 @@ import {
   Request,
   UseGuards,
   Get,
+  Req,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { UserEntity } from '../user/user.entity';
@@ -33,7 +35,9 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('is_auth')
-  isAuth() {
+  async isAuth(@Req() req: any) {
+    const isAdmin = await this.authService.isAdmin(req.user.username);
+    if (!isAdmin) throw new UnauthorizedException();
     return { message: 'token is life' };
   }
 }

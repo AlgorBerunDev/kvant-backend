@@ -15,6 +15,7 @@ model User {
   contact             String                     @unique
   username            String
   password            String
+  role                String?                    @default("public")
   orders              Order[]
   createdAt           DateTime                   @default(now())
   updatedAt           DateTime                   @updatedAt
@@ -98,8 +99,9 @@ model Category {
   title    String
   image    String?
   icon     String?
+  order    Int?                   @default(0)
   parentId Int?
-  isBanner Boolean? @default(false)
+  isBanner Boolean?               @default(false)
   parent   Category?              @relation("Children", fields: [parentId], references: [id])
   children Category[]             @relation("Children")
   products CategoriesOnProducts[]

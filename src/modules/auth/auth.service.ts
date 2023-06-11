@@ -36,4 +36,7 @@ export class AuthService {
   async registration(createUserDto: CreateUserDto): Promise<User> {
     return this.userService.create(createUserDto);
   }
+  async isAdmin(username) {
+    return this.userService.isAdmin(username);
+  }
 }

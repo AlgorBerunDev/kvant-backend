@@ -9,17 +9,39 @@ import uploadToS3 from '@/src/utils/uploader/uploadToS3';
 export class CategoryService {
   constructor(private prisma: PrismaService) {}
 
-  create(createCategoryDto: CreateCategoryDto) {
-    return this.prisma.category.create({ data: createCategoryDto });
+  async create(createCategoryDto: CreateCategoryDto) {
+    const createdCategory = await this.prisma.category.create({
+      data: createCategoryDto,
+    });
+
+    await this.prisma.category.update({
+      where: { id: createdCategory.id },
+      data: { order: createdCategory.id },
+    });
+
+    const allCategories = await this.prisma.category.findMany();
+    await Promise.all(
+      allCategories.map((c) => {
+        return this.prisma.category.update({
+          where: { id: c.id },
+          data: { order: c.id },
+        });
+      }),
+    );
+    return createdCategory;
   }
 
-  findAll() {
-    return this.prisma.category.findMany({
-      where: { parentId: null },
-      include: {
-        children: { include: { children: true } },
-      },
-    });
+  findAll({ isTree }: { isTree: boolean }) {
+    if (isTree)
+      return this.prisma.category.findMany({
+        where: { parentId: null },
+        include: {
+          children: { include: { children: true } },
+        },
+        orderBy: { order: 'desc' },
+      });
+
+    return this.prisma.category.findMany();
   }
 
   banners() {
@@ -37,6 +59,18 @@ export class CategoryService {
       where: { id },
       data: updateCategoryDto,
     });
+  }
+
+  async updateOrders(idWithOrders: { id: number; order: number }[]) {
+    await Promise.all(
+      idWithOrders.map((item) => {
+        return this.prisma.category.update({
+          where: { id: item.id },
+          data: { order: item.order },
+        });
+      }),
+    );
+    return true;
   }
 
   remove(id: number) {

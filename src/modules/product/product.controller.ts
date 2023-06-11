@@ -11,6 +11,7 @@ import {
   Put,
   ParseIntPipe,
   DefaultValuePipe,
+  Patch,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -118,8 +119,46 @@ export class ProductController {
     return this.productService.findOne(+id);
   }
 
-  @Put(':id')
-  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
+  @Patch(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() updateProductDto: UpdateProductDto,
+  ) {
+    //TODO: move to utils
+    function getIdsNestedObject(object) {
+      const { parent, ...obj } = object;
+      if (object.parent) {
+        return [obj, ...getIdsNestedObject(object.parent)];
+      } else {
+        return [obj];
+      }
+    }
+
+    const categoriesTree = await this.prisma.category.findFirst({
+      where: { id: updateProductDto.categories[0].id },
+      include: {
+        parent: {
+          include: {
+            parent: {
+              include: {
+                parent: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    //TODO: move to create product DTO validation
+    const accessToAddProduct =
+      await this.productService.checkCategoryIdForAddProduct(
+        updateProductDto.categories[0].id,
+      );
+    if (!accessToAddProduct)
+      return {
+        message:
+          "Bu oxirgi children category emas, umuman children categorysi bo'magan categoryga maxsulot qo'shish mumkin",
+      };
+    updateProductDto.categories = getIdsNestedObject(categoriesTree);
     //TODO: add update all parent category
     return this.productService.update(+id, updateProductDto);
   }

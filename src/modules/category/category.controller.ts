@@ -9,6 +9,9 @@ import {
   Put,
   UploadedFile,
   UseInterceptors,
+  Query,
+  DefaultValuePipe,
+  ParseBoolPipe,
 } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
@@ -25,8 +28,11 @@ export class CategoryController {
   }
 
   @Get()
-  findAll() {
-    return this.categoryService.findAll();
+  findAll(
+    @Query('isTree', new DefaultValuePipe(true), ParseBoolPipe)
+    isTree: boolean,
+  ) {
+    return this.categoryService.findAll({ isTree });
   }
 
   @Get('/banners')
@@ -37,6 +43,11 @@ export class CategoryController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.categoryService.findOne(+id);
+  }
+
+  @Patch('/orders')
+  updateOrders(@Body() body: any) {
+    return this.categoryService.updateOrders(body.idWithOrders);
   }
 
   @Patch(':id')
@@ -59,6 +70,7 @@ export class CategoryController {
     @Param('id') categoryId: number,
   ) {
     return this.categoryService.addImage(+categoryId, imageFile, 'image');
+    //
   }
 
   @Delete(':id/image')
@@ -72,6 +84,7 @@ export class CategoryController {
     @UploadedFile('file') imageFile: any,
     @Param('id') categoryId: number,
   ) {
+    console.log(imageFile);
     return this.categoryService.addImage(+categoryId, imageFile, 'icon');
   }
 

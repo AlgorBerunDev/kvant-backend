@@ -113,6 +113,7 @@ export class ProductService {
     return this.prisma.product.update({
       where: { id },
       data: {
+        ...updateProductDto,
         categories: {
           create: updateProductDto.categories.map((category) => {
             return {

@@ -15,6 +15,10 @@ import {
 export class CategoryDto implements Category {
   @IsInt()
   @IsOptional()
+  order: number;
+
+  @IsInt()
+  @IsOptional()
   parentId: number | null;
 
   @IsString()

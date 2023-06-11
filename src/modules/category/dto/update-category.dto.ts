@@ -18,4 +18,8 @@ export class UpdateCategoryDto {
   @IsInt()
   @IsOptional()
   parentId: number;
+
+  @IsInt()
+  @IsOptional()
+  order: number;
 }
