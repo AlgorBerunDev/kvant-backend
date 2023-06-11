@@ -3,7 +3,6 @@ import { AppModule } from './app.module';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationError, useContainer } from 'class-validator';
-import { CorsMiddleware } from '@nestjs/platform-express';
 import * as dotenv from 'dotenv';
 
 async function bootstrap() {
@@ -25,18 +24,14 @@ async function bootstrap() {
       'https://kvant-admin.fibro.uz',
     ],
   };
-  app.use(
-    CorsMiddleware({
-      origin: [
-        process.env.AUTHORITY,
-        process.env.PUBLIC_DOMEN,
-        'https://kvant-admin.fibro.uz',
-        'http://localhost:3028',
-        'http://localhost:3001',
-      ],
-    }),
-  );
-  // app.enableCors({ origin: '*' });
+  // app.use(
+  //   CorsMiddleware({
+  //     origin: [
+
+  //     ],
+  //   }),
+  // );
+  app.enableCors(corsOptions);
   app.useGlobalPipes(
     new ValidationPipe({
       exceptionFactory: (validationErrors: ValidationError[] = []) => {
