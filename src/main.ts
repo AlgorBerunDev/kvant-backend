@@ -24,7 +24,7 @@ async function bootstrap() {
       'https://kvant-admin.fibro.uz',
     ],
   };
-  app.enableCors(corsOptions);
+  app.enableCors({ origin: '*' });
   app.useGlobalPipes(
     new ValidationPipe({
       exceptionFactory: (validationErrors: ValidationError[] = []) => {
