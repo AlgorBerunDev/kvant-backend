@@ -22,6 +22,8 @@ async function bootstrap() {
       process.env.AUTHORITY,
       process.env.PUBLIC_DOMEN,
       'https://kvant-admin.fibro.uz',
+      'http://locahost:3028',
+      'http://locahost:3001',
     ],
   };
   // app.use(
