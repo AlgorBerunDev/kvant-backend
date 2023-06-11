@@ -23,6 +23,7 @@ async function bootstrap() {
       process.env.PUBLIC_DOMEN,
       'http://localhost:3000',
       'http://localhost',
+      'https://kvant-admin.fibro.uz',
     ],
   };
   app.enableCors({
