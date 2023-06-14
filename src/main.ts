@@ -21,6 +21,7 @@ async function bootstrap() {
     origin: [
       process.env.AUTHORITY,
       process.env.PUBLIC_DOMEN,
+      'http://kvant.uz',
       'https://kvant-admin.fibro.uz',
       'https://admin.kvant.uz',
       'https://kvant.fibro.uz',
