@@ -73,7 +73,7 @@ export class CategoryService {
     return true;
   }
 
-  remove(id: number) {
+  async remove(id: number) {
     return this.prisma.category.deleteMany({ where: { id } });
   }
 

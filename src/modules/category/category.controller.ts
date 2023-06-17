@@ -3,7 +3,6 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   Put,
@@ -17,6 +16,7 @@ import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { RemoveCategoryDto } from './dto/remove-category.dto';
 
 @Controller('categories')
 export class CategoryController {
@@ -45,12 +45,12 @@ export class CategoryController {
     return this.categoryService.findOne(+id);
   }
 
-  @Patch('/orders')
+  @Put('/orders')
   updateOrders(@Body() body: any) {
     return this.categoryService.updateOrders(body.idWithOrders);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(
     @Param('id') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
@@ -59,8 +59,9 @@ export class CategoryController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.categoryService.remove(+id);
+  remove(@Param() params: RemoveCategoryDto) {
+    console.log(params.fields);
+    return this.categoryService.remove(params.fields.id);
   }
 
   @Post(':id/image')
