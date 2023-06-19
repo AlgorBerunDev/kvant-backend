@@ -9,36 +9,41 @@ import { I18nValidationPipe } from 'nestjs-i18n';
 async function bootstrap() {
   dotenv.config();
   const app = await NestFactory.create(AppModule);
+  console.log(process.env);
 
-  const corsOptions = {
-    allowedHeaders: [
-      'origin',
-      'x-requested-with',
-      'content-type',
-      'accept',
-      'authorization',
-    ],
-    credentials: true,
-    origin: [
-      process.env.AUTHORITY,
-      process.env.PUBLIC_DOMEN,
-      'http://kvant.uz',
-      'https://kvant-admin.fibro.uz',
-      'https://admin.kvant.uz',
-      'https://kvant.fibro.uz',
-      'https://api.fibro.uz',
-      'http://locahost:3028',
-      'http://locahost:3001',
-    ],
-  };
-  // app.use(
-  //   CorsMiddleware({
-  //     origin: [
+  if (process.env.NODE_ENV === 'production')
+    app.enableCors({
+      allowedHeaders: [
+        'origin',
+        'x-requested-with',
+        'content-type',
+        'accept',
+        'authorization',
+      ],
+      credentials: true,
+      origin: [
+        process.env.AUTHORITY,
+        process.env.PUBLIC_DOMEN,
+        'http://kvant.uz',
+        'https://kvant-admin.fibro.uz',
+        'https://admin.kvant.uz',
+        'https://kvant.fibro.uz',
+        'https://api.fibro.uz',
+      ],
+    });
 
-  //     ],
-  //   }),
-  // );
-  app.enableCors(corsOptions);
+  if (process.env.NODE_ENV === 'development')
+    app.enableCors({
+      allowedHeaders: [
+        'origin',
+        'x-requested-with',
+        'content-type',
+        'accept',
+        'authorization',
+      ],
+      origin: 'http://localhost:3028',
+      credentials: true,
+    });
   app.useGlobalPipes(
     new ValidationPipe({
       exceptionFactory: (validationErrors: ValidationError[] = []) => {

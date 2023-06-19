@@ -36,7 +36,29 @@ export class CategoryService {
       return this.prisma.category.findMany({
         where: { parentId: null },
         include: {
-          children: { include: { children: true } },
+          children: {
+            include: {
+              children: {
+                include: {
+                  _count: {
+                    select: {
+                      products: true,
+                    },
+                  },
+                },
+              },
+              _count: {
+                select: {
+                  products: true,
+                },
+              },
+            },
+          },
+          _count: {
+            select: {
+              products: true,
+            },
+          },
         },
         orderBy: { order: 'desc' },
       });
