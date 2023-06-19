@@ -9,7 +9,6 @@ import { I18nValidationPipe } from 'nestjs-i18n';
 async function bootstrap() {
   dotenv.config();
   const app = await NestFactory.create(AppModule);
-  console.log(process.env);
 
   if (process.env.NODE_ENV === 'production')
     app.enableCors({
