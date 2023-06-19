@@ -1,0 +1,3 @@
+{
+  "IMPOSSIBLE_TO_DELETE": "Перед удалением этого {modelName} переместите {fieldName}, принадлежащие этому {modelName}."
+}

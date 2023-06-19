@@ -8,8 +8,7 @@ export class RemoveCategoryDto {
       modelName: 'category',
       fieldName: 'products',
       isRelationship: true,
-      message:
-        'Before deleting this category, move the products that belong to this category.',
+      message: 'validation.IMPOSSIBLE_TO_DELETE',
     },
   ])
   @IsNumberString()

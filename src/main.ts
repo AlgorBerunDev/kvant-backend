@@ -4,6 +4,7 @@ import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationError, useContainer } from 'class-validator';
 import * as dotenv from 'dotenv';
+import { I18nValidationPipe } from 'nestjs-i18n';
 
 async function bootstrap() {
   dotenv.config();
@@ -51,6 +52,7 @@ async function bootstrap() {
         );
       },
     }),
+    new I18nValidationPipe(),
   );
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });

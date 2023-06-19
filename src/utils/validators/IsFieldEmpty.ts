@@ -4,6 +4,7 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator';
+import { I18nContext } from 'nestjs-i18n';
 
 import { PrismaService } from 'nestjs-prisma';
 
@@ -51,7 +52,12 @@ export class IsFieldEmpty implements ValidatorConstraintInterface {
   defaultMessage(validationArguments: ValidationArguments) {
     const argument = validationArguments
       .constraints[0] as ValidationArgumentType;
-    if (argument.message) return argument.message;
+
+    const i18n = I18nContext.current();
+
+    if (argument.message)
+      return i18n.t(argument.message, { args: { ...argument } }) as any;
+
     return `${argument.fieldName} is not empty`;
   }
 }

@@ -11,10 +11,23 @@ import { OrderModule } from './modules/order/order.module';
 import { CategoryModule } from './modules/category/category.module';
 import { ContentModule } from './modules/content/content.module';
 import { PaymentsModule } from './modules/payments/payments.module';
+import * as path from 'path';
+import { AcceptLanguageResolver, I18nModule } from 'nestjs-i18n';
 
 @Module({
   imports: [
     PrismaModule.forRoot({ isGlobal: true }),
+    I18nModule.forRootAsync({
+      resolvers: [AcceptLanguageResolver],
+      useFactory: () => ({
+        fallbackLanguage: 'en',
+        loaderOptions: {
+          path: path.join(__dirname, '..', 'i18n'),
+          watch: true,
+        },
+        logging: true,
+      }),
+    }),
     UserModule,
     AuthModule,
     ProductModule,
