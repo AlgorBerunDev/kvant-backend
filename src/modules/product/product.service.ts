@@ -140,6 +140,9 @@ export class ProductService {
     await this.prisma.categoriesOnProducts.deleteMany({
       where: { productId: id },
     });
+    await this.prisma.image.deleteMany({
+      where: { imageableId: id, imageableType: 'Product' },
+    });
     return this.prisma.product.deleteMany({ where: { id } });
   }
 

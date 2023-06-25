@@ -8,8 +8,10 @@ export class UpdateProductDto extends PartialType(CreateProductDto) {
   name: string;
 
   @IsString()
-  @IsNotEmpty()
   description: string;
+
+  @IsString()
+  detail: string;
 
   @IsNotEmpty()
   @Min(0)

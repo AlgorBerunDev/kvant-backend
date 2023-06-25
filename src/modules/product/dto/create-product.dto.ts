@@ -47,11 +47,9 @@ export class CreateProductDto {
   name: string;
 
   @IsString()
-  @IsNotEmpty()
   description: string;
 
   @IsString()
-  @IsNotEmpty()
   detail: string;
 
   @IsNotEmpty()
