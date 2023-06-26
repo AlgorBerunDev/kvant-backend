@@ -20,7 +20,7 @@ export class OrderService {
       data: { ...createOrderDto, status: OrderStatus.InCart },
     });
     await axios({
-      url: 'http://click.fibro.uz/api/order',
+      url: 'https://click.fibro.uz/api/order',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -59,7 +59,7 @@ export class OrderService {
     });
 
     await axios({
-      url: 'http://click.fibro.uz/api/order/' + orderId,
+      url: 'https://click.fibro.uz/api/order/' + orderId,
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
