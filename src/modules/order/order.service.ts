@@ -58,20 +58,23 @@ export class OrderService {
       sum = sum + orderDetail.price * orderDetail.quantity;
     });
 
-    const r = await axios({
-      url: 'https://click.fibro.uz/api/order/' + orderId,
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: {
-        original_id: orderId,
-        total_price: sum,
-        original_created_at: order.createdAt,
-        original_updated_at: order.updatedAt,
-      },
-    });
-    console.log(r);
+    try {
+      await axios({
+        url: 'https://click.fibro.uz/api/order/' + orderId,
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: {
+          original_id: orderId,
+          total_price: sum,
+          original_created_at: order.createdAt,
+          original_updated_at: order.updatedAt,
+        },
+      });
+    } catch (e) {
+      console.log(e);
+    }
 
     return sum;
   }
