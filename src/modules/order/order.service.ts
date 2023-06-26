@@ -58,7 +58,7 @@ export class OrderService {
       sum = sum + orderDetail.price * orderDetail.quantity;
     });
 
-    await axios({
+    const r = await axios({
       url: 'https://click.fibro.uz/api/order/' + orderId,
       method: 'PUT',
       headers: {
@@ -71,6 +71,7 @@ export class OrderService {
         original_updated_at: order.updatedAt,
       },
     });
+    console.log(r);
 
     return sum;
   }
