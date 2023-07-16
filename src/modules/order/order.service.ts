@@ -47,6 +47,12 @@ export class OrderService {
     return addOrderDetail;
   }
 
+  async updateOrderStatus(orderStatusDto: { status: string; id: number }) {
+    return this.prisma.order.update({
+      where: { id: +orderStatusDto.id },
+      data: { status: orderStatusDto.status },
+    });
+  }
   async updateRemoteOrder(orderId) {
     const order = await this.prisma.order.findFirst({ where: { id: orderId } });
     const allOrderDetails = await this.prisma.orderDetail.findMany({

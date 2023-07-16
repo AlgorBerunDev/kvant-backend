@@ -26,6 +26,11 @@ export class OrderController {
     return this.orderService.addOrderDetail(orderDetailDto);
   }
 
+  @Put('/status')
+  updateOrderStatus(@Body() orderStatusDto: { status: string; id: number }) {
+    return this.orderService.updateOrderStatus(orderStatusDto);
+  }
+
   @Put('/details/:id')
   updateOrderDetail(
     @Param('id') orderDetailId: number,
