@@ -24,19 +24,20 @@ model User {
 }
 
 model Product {
-  id                  Int                        @id @default(autoincrement())
-  name                String
-  description         String
-  price               Float
-  views               Int                        @default(0)
-  detail              String
-  images              Image[]                    @relation("ProductImage")
-  createdAt           DateTime                   @default(now())
-  updatedAt           DateTime                   @updatedAt
-  orderDetails        OrderDetail[]
-  categories          CategoriesOnProducts[]
-  favouriters         UsersOnFavouriteProducts[]
-  usersOnRateProducts UsersOnRateProducts[]
+  id                   Int                        @id @default(autoincrement())
+  name                 String
+  description          String
+  price                Float
+  priceWithoutDiscount Float                      @default(0.0)
+  views                Int                        @default(0)
+  detail               String
+  images               Image[]                    @relation("ProductImage")
+  createdAt            DateTime                   @default(now())
+  updatedAt            DateTime                   @updatedAt
+  orderDetails         OrderDetail[]
+  categories           CategoriesOnProducts[]
+  favouriters          UsersOnFavouriteProducts[]
+  usersOnRateProducts  UsersOnRateProducts[]
 }
 
 model UsersOnFavouriteProducts {
@@ -61,25 +62,27 @@ model UsersOnRateProducts {
 }
 
 model Order {
-  id           Int           @id @default(autoincrement())
-  user         User          @relation(fields: [userId], references: [id])
-  userId       Int
-  status       String
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  orderDetails OrderDetail[]
+  id             Int           @id @default(autoincrement())
+  user           User          @relation(fields: [userId], references: [id])
+  userId         Int
+  status         String
+  deliveryMethod Int           @default(0)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  orderDetails   OrderDetail[]
 }
 
 model OrderDetail {
-  id        Int      @id @default(autoincrement())
-  order     Order    @relation(fields: [orderId], references: [id])
-  orderId   Int
-  product   Product  @relation(fields: [productId], references: [id])
-  productId Int
-  quantity  Int
-  price     Float
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                Int      @id @default(autoincrement())
+  order             Order    @relation(fields: [orderId], references: [id])
+  orderId           Int
+  product           Product  @relation(fields: [productId], references: [id])
+  productId         Int
+  quantity          Int
+  price             Float
+  priceWithDiscount Float    @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
 
 model Image {

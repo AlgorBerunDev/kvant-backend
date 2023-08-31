@@ -6,4 +6,8 @@ export class CreateOrderDto {
   @IsInt()
   @IsNotEmpty()
   userId: number;
+
+  @IsInt()
+  @IsNotEmpty()
+  deliveryMethod: number;
 }

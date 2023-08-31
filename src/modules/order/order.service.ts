@@ -41,7 +41,11 @@ export class OrderService {
     });
 
     const addOrderDetail = await this.prisma.orderDetail.create({
-      data: { ...orderDetailDto, price: product.price },
+      data: {
+        ...orderDetailDto,
+        price: product.price,
+        priceWithDiscount: product.priceWithoutDiscount,
+      },
     });
     await this.updateRemoteOrder(addOrderDetail.orderId);
     return addOrderDetail;
@@ -53,6 +57,7 @@ export class OrderService {
       data: { status: orderStatusDto.status },
     });
   }
+
   async updateRemoteOrder(orderId) {
     const order = await this.prisma.order.findFirst({ where: { id: orderId } });
     const allOrderDetails = await this.prisma.orderDetail.findMany({
@@ -84,6 +89,7 @@ export class OrderService {
 
     return sum;
   }
+
   async updateOrderDetail(
     orderDetailId: number,
     orderDetailDto: UpdateOrderDetailDto,
