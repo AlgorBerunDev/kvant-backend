@@ -7,7 +7,7 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  users(): Promise<User[]> {
-    return this.appService.users();
+  users(): any {
+    return {};
   }
 }
